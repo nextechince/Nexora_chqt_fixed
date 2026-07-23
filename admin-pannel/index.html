@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXORA CHQT Admin Panel</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="admin-login">
+            <div class="login-container glass">
+                <div class="login-header">
+                    <h1>🔐 Admin Panel</h1>
+                    <p>NEXORA CHQT Administration</p>
+                </div>
+                <form id="adminLoginForm">
+                    <div class="form-group">
+                        <label for="adminEmail">Email</label>
+                        <input type="email" id="adminEmail" placeholder="admin@nexorachqt.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword">Password</label>
+                        <input type="password" id="adminPassword" placeholder="Enter password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboardScreen" style="display: none;">
+            <nav class="admin-nav">
+                <div class="nav-brand">
+                    <span>🔷 NEXORA CHQT</span>
+                    <span class="nav-badge">Admin</span>
+                </div>
+                <div class="nav-links">
+                    <button class="nav-link active" data-section="dashboard">📊 Dashboard</button>
+                    <button class="nav-link" data-section="users">👥 Users</button>
+                    <button class="nav-link" data-section="groups">👤 Groups</button>
+                    <button class="nav-link" data-section="channels">📢 Channels</button>
+                    <button class="nav-link" data-section="reports">🚨 Reports</button>
+                    <button class="nav-link" data-section="analytics">📈 Analytics</button>
+                    <button class="nav-link" data-section="settings">⚙️ Settings</button>
+                </div>
+                <button id="adminLogout" class="btn btn-danger btn-sm">Logout</button>
+            </nav>
+
+            <main class="admin-content">
+                <div id="adminContent">
+                    <!-- Dynamic content -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>
