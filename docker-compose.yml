@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nexora-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./frontend/public:/usr/share/nginx/html:ro
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    depends_on:
+      - backend
+      - frontend
+      - admin
+    restart: always
+    networks:
+      - nexora-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/Dockerfile.backend
+    container_name: nexora-backend
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./uploads:/app/uploads
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+      - postgres
+    restart: always
+    networks:
+      - nexora-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: nexora-frontend
+    ports:
+      - "3000:3000"
+    restart: always
+    networks:
+      - nexora-network
+
+  admin:
+    build:
+      context: ./admin-panel
+      dockerfile: ../docker/Dockerfile.admin
+    container_name: nexora-admin
+    ports:
+      - "3001:3001"
+    restart: always
+    networks:
+      - nexora-network
+
+  postgres:
+    image: supabase/postgres:15.1
+    container_name: nexora-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: nexora
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - nexora-network
+
+  redis:
+    image: redis:alpine
+    container_name: nexora-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    restart: always
+    networks:
+      - nexora-network
+
+networks:
+  nexora-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  uploads:
